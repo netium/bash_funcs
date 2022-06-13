@@ -1,5 +1,7 @@
 #! /usr/bin/bash
 
+# This source code is under the GPL3.0 license
+
 function cmd_exist() {
 	local OPTIND
 
