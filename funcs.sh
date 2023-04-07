@@ -182,25 +182,26 @@ function gen_rsa_cert() {
 }
 
 function show_certs_in_pem() {
-	local OPIND
-	while getopts ":c" opt; do
-		case $opt in
-			c) local bundle_pem_file=$OPTARG ;;
-			*) echo "Unkown option: $opt" ; return 1;;
-		esac
-	done
-
+	local OPTIND
 	if ! cmd_exist openssl ; then
 		echo "Openssl cannot be found, please install it first before running this function"
 		return 1
 	fi
 
-	openssl crl2pkcs7 -nocrl -certfile "$bundle_pem_file" | openssl pkcs7 -print_certs -text -noout
-	ret=$?
-	if (( $et != 0 )); then
-		echo "Error: cannot show the certification details in the bundle."
-		return 1;
+	if (( $# != 1)); then
+		echo "Usage: show_certs_in_pem pem_file_path"
+		return 1
 	fi
 
-	return 0
+	if [ ! -r "$1" ]; then
+		echo "Cert bundle file doesn't exist or the cert bundle file doesn't have read permission."
+		return 1
+	fi
+
+	bundle_pem_file=$1
+
+	openssl crl2pkcs7 -nocrl -certfile "$bundle_pem_file" | openssl pkcs7 -print_certs -text -noout 
+
+	ret=$?
+	return $ret
 }
