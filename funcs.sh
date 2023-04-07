@@ -181,7 +181,12 @@ function gen_rsa_cert() {
 	return 0 
 }
 
-function show_certs_in_pem() {
+# Function: show_cert_bundle
+# Description: Display all the certificate details in the cert bundle (PEM file)
+# Options:
+#	%1: X.509 certificate bundle file path
+# Return: 0 if success, non-0 otherwise
+function show_cert_bundle() {
 	local OPTIND
 	if ! cmd_exist openssl ; then
 		echo "Openssl cannot be found, please install it first before running this function"
